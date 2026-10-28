@@ -1,0 +1,8 @@
+Model: ConstantNoForkBaseline
+Split: test (Threshold: 0.50)
+
+                Predicted Negative    Predicted Positive
+Actual Negative          790 (TN)                  0 (FP)
+Actual Positive          818 (FN)                  0 (TP)
+
+Total: 1608 | Accuracy: 0.4913 | Precision: 0.0000 | Recall: 0.0000 | F1: 0.0000

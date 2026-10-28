@@ -1,0 +1,26 @@
+# Baseline scenario — §6 of CASE_STUDY_DEMO_PLAN.md
+# Parameters: latency 50±10ms, prop 100±20ms, uptime ~99%, 10 nodes, T=1s.
+# Churn is enabled with mean_on=100s and mean_off=1s, giving uptime ≈ 99.0%.
+# This matches the experimental plan description of "uptime 99%".
+# Run: go run ./cmd/metrics --scenario scenarios/baseline.yaml --seed 1
+name: baseline
+num_nodes: 10
+block_interval_sec: 1.0
+block_jitter_sec: 0.1
+mean_latency_ms: 50.0
+latency_jitter_ms: 10.0
+mean_prop_delay_ms: 100.0
+prop_delay_jitter_ms: 20.0
+sim_duration_sec: 300.0
+max_blocks: 0
+seed: 42
+output_dir: outputs/runs
+peers_per_node: 3
+tx_per_block: 10
+churn_enabled: true
+churn_mean_on_sec: 100.0
+churn_mean_off_sec: 1.0
+tx_arrival_rate: 1.0
+warm_up_blocks: 0
+confirmation_depth: 6
+settlement_grace_sec: 10.0

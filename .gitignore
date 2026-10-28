@@ -1,0 +1,149 @@
+# ==============================================================================
+# ForkRisk — Root Git Ignore Configuration
+# Project: Predicting Network-Induced Fork Risk in Blockchain Networks
+# ==============================================================================
+
+# ------------------------------------------------------------------------------
+# 1. Go Build & Binary Artifacts
+# ------------------------------------------------------------------------------
+# Compiled binaries, object files, and packages
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+*.a
+/bin/
+dashboard.exe
+
+# Go workspace file
+go.work
+go.work.sum
+
+# ------------------------------------------------------------------------------
+# 2. Testing, Coverage, and Profiling Artifacts
+# ------------------------------------------------------------------------------
+# Test execution binaries
+*.test
+__debug_bin*
+
+# Coverage profiles
+*.out
+coverage.*
+c.out
+
+# Go runtime execution traces and profiling dumps
+*.prof
+cpu.prof
+mem.prof
+trace.out
+
+# ------------------------------------------------------------------------------
+# 3. Operating System Metadata
+# ------------------------------------------------------------------------------
+# macOS metadata
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+
+# Windows thumbnail caches and system files
+Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+ehthumbs_vista.db
+desktop.ini
+
+# Linux / Unix editor backups
+*~
+.#*
+
+# ------------------------------------------------------------------------------
+# 4. Editor and IDE State
+# ------------------------------------------------------------------------------
+# Visual Studio Code workspace state
+.vscode/
+!.vscode/extensions.json
+
+# JetBrains / GoLand IDE configuration
+.idea/
+*.iml
+*.iws
+
+# Vim / Emacs swap and backup files
+*.swp
+*.swo
+*~
+*.bak
+
+# ------------------------------------------------------------------------------
+# 5. Local Environment, Secrets, and Temporary Files
+# ------------------------------------------------------------------------------
+# Local environment variables and credentials
+.env
+.env.*
+*.local
+*.key
+*.pem
+
+# Scratch, temporary debugging, and developer experiment scripts
+scratch/
+tmp/
+temp/
+
+# Ad-hoc prediction CSV outputs from live CLI runs
+predictions.csv
+
+# ------------------------------------------------------------------------------
+# 6. Large Distribution Archives (Binary Release Packages)
+# ------------------------------------------------------------------------------
+# Binary zip distribution archives and sidecars belong in GitHub Release Assets,
+# not tracked in Git commit history (to avoid repository bloat).
+*.zip
+*.zip.sha256
+
+# ------------------------------------------------------------------------------
+# 7. Heavy Ephemeral Simulation Event Logs (Milestone 4 Production Runs)
+# ------------------------------------------------------------------------------
+# The 240 production runs under Milestone 4 (8 scenarios × 30 seeds, 10,000 blocks each)
+# generate ~6.4 GB of raw JSONL event streams.
+# To keep repository clones lightweight and responsive:
+# - Raw 26 MB production event logs are excluded from Git.
+# - Crucial metadata (metadata.json) and run summaries (run_summary.csv) ARE preserved,
+#   allowing the web dashboard and CLI to operate in summary-only mode with zero data loss.
+outputs/experiments/milestone4/runs/**/events.jsonl
+
+# ------------------------------------------------------------------------------
+# 8. PRESERVATION POLICY — Essential Reproducibility & Research Artifacts
+# ------------------------------------------------------------------------------
+# Explicitly ensure required research datasets, models, metrics, and configs remain tracked:
+!go.mod
+!go.sum
+!cmd/
+!internal/
+!tests/
+!web/
+!docs/
+!scenarios/
+!scenarios/production/
+!ml_reference/
+!verification/
+!outputs/summary.csv
+!outputs/pilot_summary.csv
+!outputs/pilot_final/
+!outputs/demo/
+!outputs/final_evaluation/
+!outputs/ml/dataset/
+!outputs/ml/splits/
+!outputs/ml/models/
+!outputs/ml/evaluation/
+!outputs/ml/drift/
+!outputs/experiments/milestone4/run_summary.csv
+!outputs/experiments/milestone4/scenario_summary.csv
+!outputs/experiments/milestone4/run_manifest.json
+!outputs/experiments/milestone4/production_eval_metrics.json
+!outputs/experiments/milestone4/drift_results.json
+!outputs/experiments/milestone4/drift_report.md
+!outputs/experiments/milestone4/experiment_report.md
+!outputs/experiments/milestone4/charts/
+!outputs/experiments/milestone4/runs/**/metadata.json

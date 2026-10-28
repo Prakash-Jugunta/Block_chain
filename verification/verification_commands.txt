@@ -1,0 +1,136 @@
+# ForkRisk — Milestones 1–6 Final Verified Execution Log
+Date: 2026-10-26T12:28:35Z
+Platform: windows/amd64
+Go Version: go1.25.1 windows/amd64
+Static Test Inventory: 175 top-level Test declarations across 19 test files (100% pass)
+
+================================================================================
+1. CODE FORMATTING & COMPILATION
+================================================================================
+$ go version
+go version go1.25.1 windows/amd64
+Exit Code: 0
+
+$ gofmt -l .
+(No files output - all Go source files adhere to canonical gofmt style)
+Exit Code: 0
+
+$ go build ./...
+(No errors - all packages and CLI commands compile cleanly)
+Exit Code: 0
+
+================================================================================
+2. COMPREHENSIVE REPOSITORY TEST SUITE
+================================================================================
+$ go test ./... -count=1
+?   	github.com/pranav-k/forkrisk/cmd/dashboard	[no test files]
+?   	github.com/pranav-k/forkrisk/cmd/dataset	[no test files]
+?   	github.com/pranav-k/forkrisk/cmd/demo	[no test files]
+?   	github.com/pranav-k/forkrisk/cmd/drift	[no test files]
+?   	github.com/pranav-k/forkrisk/cmd/evaluate	[no test files]
+?   	github.com/pranav-k/forkrisk/cmd/experiment	[no test files]
+ok  	github.com/pranav-k/forkrisk/cmd/labelaudit	0.034s
+?   	github.com/pranav-k/forkrisk/cmd/metrics	[no test files]
+?   	github.com/pranav-k/forkrisk/cmd/predict	[no test files]
+?   	github.com/pranav-k/forkrisk/cmd/report	[no test files]
+?   	github.com/pranav-k/forkrisk/cmd/sensitivity	[no test files]
+?   	github.com/pranav-k/forkrisk/cmd/simulate	[no test files]
+?   	github.com/pranav-k/forkrisk/cmd/split	[no test files]
+?   	github.com/pranav-k/forkrisk/cmd/train	[no test files]
+?   	github.com/pranav-k/forkrisk/cmd/verify_audit	[no test files]
+ok  	github.com/pranav-k/forkrisk/internal/config	0.065s
+ok  	github.com/pranav-k/forkrisk/internal/dashboard	0.806s
+ok  	github.com/pranav-k/forkrisk/internal/engine	0.316s
+ok  	github.com/pranav-k/forkrisk/internal/features	0.363s
+ok  	github.com/pranav-k/forkrisk/internal/fork	0.074s
+ok  	github.com/pranav-k/forkrisk/internal/logstore	0.053s
+ok  	github.com/pranav-k/forkrisk/internal/metrics	0.046s
+ok  	github.com/pranav-k/forkrisk/internal/ml	0.075s
+ok  	github.com/pranav-k/forkrisk/internal/ml/drift	0.048s
+?   	github.com/pranav-k/forkrisk/internal/network	[no test files]
+ok  	github.com/pranav-k/forkrisk/internal/node	0.026s
+ok  	github.com/pranav-k/forkrisk/internal/viz	0.226s
+ok  	github.com/pranav-k/forkrisk/tests	7.322s
+Exit Code: 0
+
+Result: ALL test suites pass across all packages with zero failures.
+
+================================================================================
+3. DASHBOARD UNIT & SECURITY TEST SUITE (15 TESTS)
+================================================================================
+$ go test -v ./internal/dashboard/... -count=1
+=== RUN   TestHealthEndpoint
+--- PASS: TestHealthEndpoint (0.00s)
+=== RUN   TestMethodNotAllowedOnNonGet
+--- PASS: TestMethodNotAllowedOnNonGet (0.00s)
+=== RUN   TestPathTraversalPrevention
+--- PASS: TestPathTraversalPrevention (0.00s)
+=== RUN   TestRunsListEndpoint
+--- PASS: TestRunsListEndpoint (0.00s)
+=== RUN   TestScenariosSummaryEndpoint
+--- PASS: TestScenariosSummaryEndpoint (0.00s)
+=== RUN   TestModelEvaluation_DualScope
+--- PASS: TestModelEvaluation_DualScope (0.00s)
+=== RUN   TestDriftSummary_ArtifactBacked
+--- PASS: TestDriftSummary_ArtifactBacked (0.00s)
+=== RUN   TestRealLogFormat_NodeStatusAndTimeline
+--- PASS: TestRealLogFormat_NodeStatusAndTimeline (0.01s)
+=== RUN   TestRunDetail_ChurnMetricsAgreement
+--- PASS: TestRunDetail_ChurnMetricsAgreement (0.50s)
+=== RUN   TestDriftSummary_MissingOrCorruptArtifact
+--- PASS: TestDriftSummary_MissingOrCorruptArtifact (0.00s)
+=== RUN   TestTimeline_PaginationAndFilteringAfter500Events
+--- PASS: TestTimeline_PaginationAndFilteringAfter500Events (0.02s)
+=== RUN   TestNodeStatus_UnrecordedConfiguredNodes
+--- PASS: TestNodeStatus_UnrecordedConfiguredNodes (0.00s)
+=== RUN   TestNoWildcardCORSHeader
+--- PASS: TestNoWildcardCORSHeader (0.00s)
+=== RUN   TestRunDetail_PackagedProductionRun_SummaryOnlyMode
+--- PASS: TestRunDetail_PackagedProductionRun_SummaryOnlyMode (0.01s)
+=== RUN   TestTimeline_EffectiveProposalIndexFilteringAndCompetingFork
+--- PASS: TestTimeline_EffectiveProposalIndexFilteringAndCompetingFork (0.01s)
+PASS
+ok  	github.com/pranav-k/forkrisk/internal/dashboard	0.584s
+Exit Code: 0
+
+================================================================================
+4. DRIFT & BASELINE DIVERGENCE AUDIT TESTS
+================================================================================
+$ go test -v ./tests -run "TestBaselineDivergence|TestDriftAudit" -count=1
+=== RUN   TestBaselineDivergence_PushOnlyGossipMechanics
+=== RUN   TestBaselineDivergence_PushOnlyGossipMechanics/NoChurn_HighConsistency
+=== RUN   TestBaselineDivergence_PushOnlyGossipMechanics/WithChurn_DivergenceConfirmed
+--- PASS: TestBaselineDivergence_PushOnlyGossipMechanics (0.02s)
+    --- PASS: TestBaselineDivergence_PushOnlyGossipMechanics/NoChurn_HighConsistency (0.01s)
+    --- PASS: TestBaselineDivergence_PushOnlyGossipMechanics/WithChurn_DivergenceConfirmed (0.02s)
+=== RUN   TestDriftAudit_AllSeeds
+    drift_audit_test.go:118: Detection Summary: Detected 27 / 27 (100.00%), Undetected 0 / 27 (0.00%)
+    drift_audit_test.go:136: Delay Stats (among 27 detected seeds): Min=1, P25=1.0, Median=1.0, Mean=1.00, P75=1.0, P95=1.0, Max=1
+    drift_audit_test.go:142: Pre-transition (1000..4999): 935 alarms / 21600 points (FPR: 4.33%)
+    drift_audit_test.go:143: Post-transition (5000..9999): 2122 alarms / 27000 points (Alarm Rate: 7.86%)
+--- PASS: TestDriftAudit_AllSeeds (7.32s)
+PASS
+ok  	github.com/pranav-k/forkrisk/tests	7.350s
+Exit Code: 0
+
+================================================================================
+5. FINAL RELEASE ARCHIVES & CHECKSUM VERIFICATION
+================================================================================
+Primary Archive: forkrisk_milestone6_final_release.zip
+Path:            E:/sem7/blockchain/casestudy/forkrisk_milestone6_final_release.zip
+Size:            65386000 bytes (62.36 MB)
+SHA-256:         6b73d5a6c96327035a5aa0b4d28c0c9c7864b080c4aee4a68db08e41057181bd
+Sidecar:         forkrisk_milestone6_final_release.zip.sha256
+Entry Count:     1072 entries (1 manifest + 1071 files)
+Verification:    All 1072 entries decompressed and verified successfully (CRC32 & SHA-256 matching)
+Exit Code: 0
+
+Compact Archive: forkrisk_milestone6_verification_bundle.zip
+Path:            E:/sem7/blockchain/casestudy/forkrisk_milestone6_verification_bundle.zip
+Size:            4312558 bytes (4.11 MB) (< 15 MB verification target)
+SHA-256:         136042c68a8524339c33b06b3a591c7e63409fe2d8a3ffb16175de326f14cf09
+Sidecar:         forkrisk_milestone6_verification_bundle.zip.sha256
+Entry Count:     881 entries (1 manifest + 880 included files)
+Excluded Files:  192 files listed in excluded_files with explicit rationale (191 pilot logs + 1 production log)
+Verification:    All 881 entries decompressed and verified successfully (CRC32 & SHA-256 matching)
+Exit Code: 0

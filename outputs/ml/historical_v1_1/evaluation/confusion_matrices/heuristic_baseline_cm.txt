@@ -1,0 +1,8 @@
+Model: HeuristicBaseline
+Split: test (Threshold: 0.50)
+
+                Predicted Negative    Predicted Positive
+Actual Negative          133 (TN)                657 (FP)
+Actual Positive            0 (FN)                818 (TP)
+
+Total: 1608 | Accuracy: 0.5914 | Precision: 0.5546 | Recall: 1.0000 | F1: 0.7135

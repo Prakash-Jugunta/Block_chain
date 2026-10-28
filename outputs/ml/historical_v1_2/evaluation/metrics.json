@@ -1,0 +1,236 @@
+{
+  "evaluated_at_utc": "",
+  "test_run_count": 8,
+  "test_row_count": 1608,
+  "test_prevalence": 0.5087064676616916,
+  "models": {
+    "HeuristicBaseline": {
+      "model_name": "HeuristicBaseline",
+      "dataset_split": "test",
+      "total_samples": 1608,
+      "prevalence": 0.5087064676616916,
+      "threshold": 0.5,
+      "accuracy": 0.5914179104477612,
+      "precision": 0.5545762711864407,
+      "recall": 1,
+      "f1_score": 0.7134757959005669,
+      "roc_auc": 0.5841772151898734,
+      "pr_auc": 0.5545762711864407,
+      "brier_score": 0.28514925373134087,
+      "confusion_matrix": {
+        "tp": 818,
+        "fp": 657,
+        "tn": 133,
+        "fn": 0
+      }
+    },
+    "LogisticRegression": {
+      "model_name": "LogisticRegression",
+      "dataset_split": "test",
+      "total_samples": 1608,
+      "prevalence": 0.5087064676616916,
+      "threshold": 0.25,
+      "accuracy": 0.7475124378109452,
+      "precision": 0.6845878136200717,
+      "recall": 0.9339853300733496,
+      "f1_score": 0.7900723888314374,
+      "roc_auc": 0.8020132462628826,
+      "pr_auc": 0.754541770514439,
+      "brier_score": 0.17707758704164947,
+      "confusion_matrix": {
+        "tp": 764,
+        "fp": 352,
+        "tn": 438,
+        "fn": 54
+      }
+    },
+    "PrevalenceBaseline": {
+      "model_name": "PrevalenceBaseline",
+      "dataset_split": "test",
+      "total_samples": 1608,
+      "prevalence": 0.5087064676616916,
+      "threshold": 0.5,
+      "accuracy": 0.5087064676616916,
+      "precision": 0.5087064676616916,
+      "recall": 1,
+      "f1_score": 0.674361088211047,
+      "roc_auc": 0.5,
+      "pr_auc": 0.5087064676616916,
+      "brier_score": 0.2500145309443733,
+      "confusion_matrix": {
+        "tp": 818,
+        "fp": 790,
+        "tn": 0,
+        "fn": 0
+      }
+    },
+    "RandomForest": {
+      "model_name": "RandomForest",
+      "dataset_split": "test",
+      "total_samples": 1608,
+      "prevalence": 0.5087064676616916,
+      "threshold": 0.25,
+      "accuracy": 0.6784825870646766,
+      "precision": 0.61730319563523,
+      "recall": 0.9682151589242054,
+      "f1_score": 0.7539267015706805,
+      "roc_auc": 0.8205827736684101,
+      "pr_auc": 0.7891518245294344,
+      "brier_score": 0.17018857412889632,
+      "confusion_matrix": {
+        "tp": 792,
+        "fp": 491,
+        "tn": 299,
+        "fn": 26
+      }
+    }
+  },
+  "scenario_evaluation": {
+    "baseline": {
+      "lr_f1": 0,
+      "lr_roc_auc": 0.4685230024213075,
+      "prevalence": 0.07329842931937172,
+      "rf_f1": 0.0898876404494382,
+      "rf_roc_auc": 0.43260694108151737,
+      "samples": 191
+    },
+    "block_rate_stress": {
+      "lr_f1": 0.8303030303030302,
+      "lr_roc_auc": 0.586014761224073,
+      "prevalence": 0.7132987910189983,
+      "rf_f1": 0.8323232323232324,
+      "rf_roc_auc": 0.5782840806324572,
+      "samples": 579
+    },
+    "churn_stress": {
+      "lr_f1": 0.5555555555555556,
+      "lr_roc_auc": 0.5,
+      "prevalence": 1,
+      "rf_f1": 0.9803921568627451,
+      "rf_roc_auc": 0.5,
+      "samples": 26
+    },
+    "combined_stress": {
+      "lr_f1": 0.884272997032641,
+      "lr_roc_auc": 0.7217346411977285,
+      "prevalence": 0.7925531914893617,
+      "rf_f1": 0.884272997032641,
+      "rf_roc_auc": 0.7769747031491998,
+      "samples": 188
+    },
+    "dynamic_network": {
+      "lr_f1": 0.611111111111111,
+      "lr_roc_auc": 0.7815638450502153,
+      "prevalence": 0.23163841807909605,
+      "rf_f1": 0.48051948051948057,
+      "rf_roc_auc": 0.8093615494978479,
+      "samples": 177
+    },
+    "latency_stress": {
+      "lr_f1": 0.7209302325581396,
+      "lr_roc_auc": 0.4874551971326165,
+      "prevalence": 0.5636363636363636,
+      "rf_f1": 0.7209302325581396,
+      "rf_roc_auc": 0.6152927120669056,
+      "samples": 165
+    },
+    "propagation_stress": {
+      "lr_f1": 0.8553459119496856,
+      "lr_roc_auc": 0.31585677749360613,
+      "prevalence": 0.7472527472527473,
+      "rf_f1": 0.8553459119496856,
+      "rf_roc_auc": 0.5287723785166241,
+      "samples": 91
+    },
+    "tx_load_stress": {
+      "lr_f1": 0,
+      "lr_roc_auc": 0.49838579499596447,
+      "prevalence": 0.07329842931937172,
+      "rf_f1": 0.12698412698412698,
+      "rf_roc_auc": 0.4443099273607748,
+      "samples": 191
+    }
+  },
+  "loso_evaluation": [
+    {
+      "held_out_scenario": "baseline",
+      "train_samples": 3782,
+      "test_samples": 476,
+      "test_prevalence": 0.10714285714285714,
+      "roc_auc": 0.6994232987312572,
+      "pr_auc": 0.2650664543562401,
+      "f1_score": 0,
+      "brier_score": 0.09012207771904453
+    },
+    {
+      "held_out_scenario": "block_rate_stress",
+      "train_samples": 2772,
+      "test_samples": 1486,
+      "test_prevalence": 0.7160161507402423,
+      "roc_auc": 0.5778516195702527,
+      "pr_auc": 0.7613919469478905,
+      "f1_score": 0.00749063670411985,
+      "brier_score": 0.6018749953361493
+    },
+    {
+      "held_out_scenario": "churn_stress",
+      "train_samples": 4174,
+      "test_samples": 84,
+      "test_prevalence": 0.5952380952380952,
+      "roc_auc": 0.7894117647058824,
+      "pr_auc": 0.8610193164260292,
+      "f1_score": 0,
+      "brier_score": 0.4664076295612759
+    },
+    {
+      "held_out_scenario": "combined_stress",
+      "train_samples": 3688,
+      "test_samples": 570,
+      "test_prevalence": 0.8526315789473684,
+      "roc_auc": 0.558005095042132,
+      "pr_auc": 0.878251675965509,
+      "f1_score": 0.9204545454545454,
+      "brier_score": 0.14427528740549017
+    },
+    {
+      "held_out_scenario": "dynamic_network",
+      "train_samples": 3818,
+      "test_samples": 440,
+      "test_prevalence": 0.2340909090909091,
+      "roc_auc": 0.7393621618507101,
+      "pr_auc": 0.4445081691916964,
+      "f1_score": 0.5478260869565218,
+      "brier_score": 0.15642137147486976
+    },
+    {
+      "held_out_scenario": "latency_stress",
+      "train_samples": 3832,
+      "test_samples": 426,
+      "test_prevalence": 0.6244131455399061,
+      "roc_auc": 0.4835996240601504,
+      "pr_auc": 0.6210691504290852,
+      "f1_score": 0.7189952904238619,
+      "brier_score": 0.3056745528887545
+    },
+    {
+      "held_out_scenario": "propagation_stress",
+      "train_samples": 3986,
+      "test_samples": 272,
+      "test_prevalence": 0.8272058823529411,
+      "roc_auc": 0.3371158392434988,
+      "pr_auc": 0.7690140130095535,
+      "f1_score": 0.9054325955734406,
+      "brier_score": 0.20286941562678792
+    },
+    {
+      "held_out_scenario": "tx_load_stress",
+      "train_samples": 3754,
+      "test_samples": 504,
+      "test_prevalence": 0.0992063492063492,
+      "roc_auc": 0.5449559471365639,
+      "pr_auc": 0.10068925217362508,
+      "f1_score": 0.18050541516245486,
+      "brier_score": 0.8055377109515596
+    }
+  ]
+}

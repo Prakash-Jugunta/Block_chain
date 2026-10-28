@@ -1,0 +1,24 @@
+# Two-node validation scenario — fork-probability analytical check.
+# Total propagation delay ≈ latency + prop_delay = 200+200 = 400ms per hop.
+# At block_interval=1s: Decker-Wattenhofer theoretical fork rate ≈ 1-exp(-0.4/1.0) ≈ 33%.
+# In practice, with only 1 peer per node and short settlement, the simulator
+# produces lower fork rates; see docs/decisions.md D19 for the explanation.
+name: two_node_test
+num_nodes: 2
+block_interval_sec: 1.0
+block_jitter_sec: 0.05
+mean_latency_ms: 200.0
+latency_jitter_ms: 20.0
+mean_prop_delay_ms: 200.0
+prop_delay_jitter_ms: 20.0
+sim_duration_sec: 600.0
+max_blocks: 0
+seed: 1
+output_dir: outputs/runs
+peers_per_node: 1
+tx_per_block: 5
+churn_enabled: false
+tx_arrival_rate: 1.0
+warm_up_blocks: 0
+confirmation_depth: 6
+settlement_grace_sec: 10.0

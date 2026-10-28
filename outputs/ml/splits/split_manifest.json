@@ -1,0 +1,263 @@
+{
+  "strategy": "seed_held_out (Train: Seed 1, Val: Seed 2, Test: Seed 3)",
+  "train_runs": [
+    "baseline_seed1_1792863044",
+    "block_rate_stress_seed1_1792863048",
+    "churn_stress_seed1_1792863047",
+    "combined_stress_seed1_1792863051",
+    "dynamic_network_seed1_1792863053",
+    "latency_stress_seed1_1792863045",
+    "propagation_stress_seed1_1792863046",
+    "tx_load_stress_seed1_1792863050"
+  ],
+  "val_runs": [
+    "baseline_seed2_1792863045",
+    "block_rate_stress_seed2_1792863049",
+    "churn_stress_seed2_1792863048",
+    "combined_stress_seed2_1792863052",
+    "dynamic_network_seed2_1792863054",
+    "latency_stress_seed2_1792863046",
+    "propagation_stress_seed2_1792863047",
+    "tx_load_stress_seed2_1792863051"
+  ],
+  "test_runs": [
+    "baseline_seed3_1792863045",
+    "block_rate_stress_seed3_1792863050",
+    "churn_stress_seed3_1792863048",
+    "combined_stress_seed3_1792863053",
+    "dynamic_network_seed3_1792863054",
+    "latency_stress_seed3_1792863046",
+    "propagation_stress_seed3_1792863047",
+    "tx_load_stress_seed3_1792863051"
+  ],
+  "train_run_count": 8,
+  "val_run_count": 8,
+  "test_run_count": 8,
+  "train_rows": 1565,
+  "val_rows": 1085,
+  "test_rows": 1608,
+  "train_positives": 811,
+  "val_positives": 666,
+  "test_positives": 818,
+  "train_prevalence": 0.5182108626198083,
+  "val_prevalence": 0.6138248847926268,
+  "test_prevalence": 0.5087064676616916,
+  "run_details": {
+    "baseline_seed1_1792863044": {
+      "run_id": "baseline_seed1_1792863044",
+      "scenario": "baseline",
+      "seed": 1,
+      "split": "train",
+      "total_rows": 189,
+      "positive_count": 7,
+      "positive_rate": 0.037037037037037035
+    },
+    "baseline_seed2_1792863045": {
+      "run_id": "baseline_seed2_1792863045",
+      "scenario": "baseline",
+      "seed": 2,
+      "split": "val",
+      "total_rows": 96,
+      "positive_count": 30,
+      "positive_rate": 0.3125
+    },
+    "baseline_seed3_1792863045": {
+      "run_id": "baseline_seed3_1792863045",
+      "scenario": "baseline",
+      "seed": 3,
+      "split": "test",
+      "total_rows": 191,
+      "positive_count": 14,
+      "positive_rate": 0.07329842931937172
+    },
+    "block_rate_stress_seed1_1792863048": {
+      "run_id": "block_rate_stress_seed1_1792863048",
+      "scenario": "block_rate_stress",
+      "seed": 1,
+      "split": "train",
+      "total_rows": 562,
+      "positive_count": 409,
+      "positive_rate": 0.7277580071174378
+    },
+    "block_rate_stress_seed2_1792863049": {
+      "run_id": "block_rate_stress_seed2_1792863049",
+      "scenario": "block_rate_stress",
+      "seed": 2,
+      "split": "val",
+      "total_rows": 345,
+      "positive_count": 242,
+      "positive_rate": 0.7014492753623188
+    },
+    "block_rate_stress_seed3_1792863050": {
+      "run_id": "block_rate_stress_seed3_1792863050",
+      "scenario": "block_rate_stress",
+      "seed": 3,
+      "split": "test",
+      "total_rows": 579,
+      "positive_count": 413,
+      "positive_rate": 0.7132987910189983
+    },
+    "churn_stress_seed1_1792863047": {
+      "run_id": "churn_stress_seed1_1792863047",
+      "scenario": "churn_stress",
+      "seed": 1,
+      "split": "train",
+      "total_rows": 24,
+      "positive_count": 17,
+      "positive_rate": 0.7083333333333334
+    },
+    "churn_stress_seed2_1792863048": {
+      "run_id": "churn_stress_seed2_1792863048",
+      "scenario": "churn_stress",
+      "seed": 2,
+      "split": "val",
+      "total_rows": 34,
+      "positive_count": 7,
+      "positive_rate": 0.20588235294117646
+    },
+    "churn_stress_seed3_1792863048": {
+      "run_id": "churn_stress_seed3_1792863048",
+      "scenario": "churn_stress",
+      "seed": 3,
+      "split": "test",
+      "total_rows": 26,
+      "positive_count": 26,
+      "positive_rate": 1
+    },
+    "combined_stress_seed1_1792863051": {
+      "run_id": "combined_stress_seed1_1792863051",
+      "scenario": "combined_stress",
+      "seed": 1,
+      "split": "train",
+      "total_rows": 170,
+      "positive_count": 138,
+      "positive_rate": 0.8117647058823529
+    },
+    "combined_stress_seed2_1792863052": {
+      "run_id": "combined_stress_seed2_1792863052",
+      "scenario": "combined_stress",
+      "seed": 2,
+      "split": "val",
+      "total_rows": 212,
+      "positive_count": 199,
+      "positive_rate": 0.9386792452830188
+    },
+    "combined_stress_seed3_1792863053": {
+      "run_id": "combined_stress_seed3_1792863053",
+      "scenario": "combined_stress",
+      "seed": 3,
+      "split": "test",
+      "total_rows": 188,
+      "positive_count": 149,
+      "positive_rate": 0.7925531914893617
+    },
+    "dynamic_network_seed1_1792863053": {
+      "run_id": "dynamic_network_seed1_1792863053",
+      "scenario": "dynamic_network",
+      "seed": 1,
+      "split": "train",
+      "total_rows": 167,
+      "positive_count": 32,
+      "positive_rate": 0.19161676646706588
+    },
+    "dynamic_network_seed2_1792863054": {
+      "run_id": "dynamic_network_seed2_1792863054",
+      "scenario": "dynamic_network",
+      "seed": 2,
+      "split": "val",
+      "total_rows": 96,
+      "positive_count": 30,
+      "positive_rate": 0.3125
+    },
+    "dynamic_network_seed3_1792863054": {
+      "run_id": "dynamic_network_seed3_1792863054",
+      "scenario": "dynamic_network",
+      "seed": 3,
+      "split": "test",
+      "total_rows": 177,
+      "positive_count": 41,
+      "positive_rate": 0.23163841807909605
+    },
+    "latency_stress_seed1_1792863045": {
+      "run_id": "latency_stress_seed1_1792863045",
+      "scenario": "latency_stress",
+      "seed": 1,
+      "split": "train",
+      "total_rows": 150,
+      "positive_count": 100,
+      "positive_rate": 0.6666666666666666
+    },
+    "latency_stress_seed2_1792863046": {
+      "run_id": "latency_stress_seed2_1792863046",
+      "scenario": "latency_stress",
+      "seed": 2,
+      "split": "val",
+      "total_rows": 111,
+      "positive_count": 73,
+      "positive_rate": 0.6576576576576577
+    },
+    "latency_stress_seed3_1792863046": {
+      "run_id": "latency_stress_seed3_1792863046",
+      "scenario": "latency_stress",
+      "seed": 3,
+      "split": "test",
+      "total_rows": 165,
+      "positive_count": 93,
+      "positive_rate": 0.5636363636363636
+    },
+    "propagation_stress_seed1_1792863046": {
+      "run_id": "propagation_stress_seed1_1792863046",
+      "scenario": "propagation_stress",
+      "seed": 1,
+      "split": "train",
+      "total_rows": 114,
+      "positive_count": 101,
+      "positive_rate": 0.8859649122807017
+    },
+    "propagation_stress_seed2_1792863047": {
+      "run_id": "propagation_stress_seed2_1792863047",
+      "scenario": "propagation_stress",
+      "seed": 2,
+      "split": "val",
+      "total_rows": 67,
+      "positive_count": 56,
+      "positive_rate": 0.835820895522388
+    },
+    "propagation_stress_seed3_1792863047": {
+      "run_id": "propagation_stress_seed3_1792863047",
+      "scenario": "propagation_stress",
+      "seed": 3,
+      "split": "test",
+      "total_rows": 91,
+      "positive_count": 68,
+      "positive_rate": 0.7472527472527473
+    },
+    "tx_load_stress_seed1_1792863050": {
+      "run_id": "tx_load_stress_seed1_1792863050",
+      "scenario": "tx_load_stress",
+      "seed": 1,
+      "split": "train",
+      "total_rows": 189,
+      "positive_count": 7,
+      "positive_rate": 0.037037037037037035
+    },
+    "tx_load_stress_seed2_1792863051": {
+      "run_id": "tx_load_stress_seed2_1792863051",
+      "scenario": "tx_load_stress",
+      "seed": 2,
+      "split": "val",
+      "total_rows": 124,
+      "positive_count": 29,
+      "positive_rate": 0.23387096774193547
+    },
+    "tx_load_stress_seed3_1792863051": {
+      "run_id": "tx_load_stress_seed3_1792863051",
+      "scenario": "tx_load_stress",
+      "seed": 3,
+      "split": "test",
+      "total_rows": 191,
+      "positive_count": 14,
+      "positive_rate": 0.07329842931937172
+    }
+  }
+}

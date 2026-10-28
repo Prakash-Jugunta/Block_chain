@@ -1,0 +1,201 @@
+{
+  "generated_at_utc": "2026-10-25T19:07:59Z",
+  "task": "Schema v1.3 Height-Level Fork Prediction (H=3)",
+  "sampling_unit": "unique_block_height_anchored_first_proposal",
+  "forecast_horizon": 3,
+  "warmup_blocks": 1000,
+  "test_seeds": "4..30",
+  "total_test_runs": 216,
+  "total_samples": 57062,
+  "positive_count": 4016,
+  "negative_count": 53046,
+  "positive_rate": 0.07037958711576882,
+  "models": {
+    "HeuristicBaseline": {
+      "model_name": "HeuristicBaseline",
+      "dataset_split": "pooled_production",
+      "total_samples": 57062,
+      "prevalence": 0.07037958711576882,
+      "threshold": 0.5,
+      "accuracy": 0.07037958711576882,
+      "precision": 0.07037958711576882,
+      "recall": 1,
+      "f1_score": 0.13150397851927045,
+      "roc_auc": 0.5,
+      "pr_auc": 0.07037958711576882,
+      "brier_score": 0.5977722477302048,
+      "confusion_matrix": {
+        "tp": 4016,
+        "fp": 53046,
+        "tn": 0,
+        "fn": 0
+      }
+    },
+    "LogisticRegression": {
+      "model_name": "LogisticRegression",
+      "dataset_split": "pooled_production",
+      "total_samples": 57062,
+      "prevalence": 0.07037958711576882,
+      "threshold": 0.3,
+      "accuracy": 0.9187375135817182,
+      "precision": 0.29062710721510454,
+      "recall": 0.1073207171314741,
+      "f1_score": 0.15675577377705038,
+      "roc_auc": 0.7435216904879821,
+      "pr_auc": 0.19962810061097844,
+      "brier_score": 0.06468598729860738,
+      "confusion_matrix": {
+        "tp": 431,
+        "fp": 1052,
+        "tn": 51994,
+        "fn": 3585
+      }
+    },
+    "PrevalenceBaseline": {
+      "model_name": "PrevalenceBaseline",
+      "dataset_split": "pooled_production",
+      "total_samples": 57062,
+      "prevalence": 0.07037958711576882,
+      "threshold": 0.5,
+      "accuracy": 0.07037958711576882,
+      "precision": 0.07037958711576882,
+      "recall": 1,
+      "f1_score": 0.13150397851927045,
+      "roc_auc": 0.5,
+      "pr_auc": 0.07037958711576882,
+      "brier_score": 0.2659694230292883,
+      "confusion_matrix": {
+        "tp": 4016,
+        "fp": 53046,
+        "tn": 0,
+        "fn": 0
+      }
+    },
+    "RandomForest": {
+      "model_name": "RandomForest",
+      "dataset_split": "pooled_production",
+      "total_samples": 57062,
+      "prevalence": 0.07037958711576882,
+      "threshold": 0.39999999999999997,
+      "accuracy": 0.1055869054712418,
+      "precision": 0.06488627320341273,
+      "recall": 0.87300796812749,
+      "f1_score": 0.12079450119726437,
+      "roc_auc": 0.4769082203403706,
+      "pr_auc": 0.07071431325719439,
+      "brier_score": 0.3598675364282649,
+      "confusion_matrix": {
+        "tp": 3506,
+        "fp": 50527,
+        "tn": 2519,
+        "fn": 510
+      }
+    }
+  },
+  "scenario_breakdown": {
+    "baseline": {
+      "scenario": "baseline",
+      "test_samples": 9329,
+      "positive_count": 625,
+      "negative_count": 8704,
+      "prevalence": 0.06699539071711866,
+      "lr_roc_auc": 0.8500056985294118,
+      "lr_pr_auc": 0.34674888133846127,
+      "lr_f1": 0,
+      "rf_roc_auc": 0.5597863051470588,
+      "rf_pr_auc": 0.09007520831297344,
+      "rf_f1": 0.12246569731722302
+    },
+    "block_rate_stress": {
+      "scenario": "block_rate_stress",
+      "test_samples": 9836,
+      "positive_count": 793,
+      "negative_count": 9043,
+      "prevalence": 0.08062220414802765,
+      "lr_roc_auc": 0.8083625675785538,
+      "lr_pr_auc": 0.24845200662785594,
+      "lr_f1": 0.242846094354215,
+      "rf_roc_auc": 0.34153656224799017,
+      "rf_pr_auc": 0.05959809366388568,
+      "rf_f1": 0.09293726118575128
+    },
+    "churn_stress": {
+      "scenario": "churn_stress",
+      "test_samples": 1449,
+      "positive_count": 66,
+      "negative_count": 1383,
+      "prevalence": 0.045548654244306416,
+      "lr_roc_auc": 0.9221718267271413,
+      "lr_pr_auc": 0.33542002987961805,
+      "lr_f1": 0.33124999999999993,
+      "rf_roc_auc": 0.6266734591029602,
+      "rf_pr_auc": 0.08271169438771941,
+      "rf_f1": 0.08712871287128712
+    },
+    "combined_stress": {
+      "scenario": "combined_stress",
+      "test_samples": 4809,
+      "positive_count": 302,
+      "negative_count": 4507,
+      "prevalence": 0.0627989186941152,
+      "lr_roc_auc": 0.8903875795855454,
+      "lr_pr_auc": 0.36282401667737896,
+      "lr_f1": 0.42870999030067897,
+      "rf_roc_auc": 0.4214657993378953,
+      "rf_pr_auc": 0.05566494378849334,
+      "rf_f1": 0.10640433647861876
+    },
+    "dynamic_network": {
+      "scenario": "dynamic_network",
+      "test_samples": 9329,
+      "positive_count": 625,
+      "negative_count": 8704,
+      "prevalence": 0.06699539071711866,
+      "lr_roc_auc": 0.8486108455882353,
+      "lr_pr_auc": 0.3458372363564955,
+      "lr_f1": 0,
+      "rf_roc_auc": 0.5526676470588235,
+      "rf_pr_auc": 0.08898475614062668,
+      "rf_f1": 0.12246569731722302
+    },
+    "latency_stress": {
+      "scenario": "latency_stress",
+      "test_samples": 7715,
+      "positive_count": 677,
+      "negative_count": 7038,
+      "prevalence": 0.08775113415424497,
+      "lr_roc_auc": 0.8707890023476691,
+      "lr_pr_auc": 0.38358593733558366,
+      "lr_f1": 0,
+      "rf_roc_auc": 0.4859936332120672,
+      "rf_pr_auc": 0.09028832805167938,
+      "rf_f1": 0.16072493144151662
+    },
+    "propagation_stress": {
+      "scenario": "propagation_stress",
+      "test_samples": 4708,
+      "positive_count": 289,
+      "negative_count": 4419,
+      "prevalence": 0.061384876805437555,
+      "lr_roc_auc": 0.8943011891869882,
+      "lr_pr_auc": 0.3910592050700946,
+      "lr_f1": 0,
+      "rf_roc_auc": 0.4870447759791589,
+      "rf_pr_auc": 0.06693121357843312,
+      "rf_f1": 0.1156694016409846
+    },
+    "tx_load_stress": {
+      "scenario": "tx_load_stress",
+      "test_samples": 9887,
+      "positive_count": 639,
+      "negative_count": 9248,
+      "prevalence": 0.06463032264589866,
+      "lr_roc_auc": 0.5068737105446984,
+      "lr_pr_auc": 0.06934648588129105,
+      "lr_f1": 0,
+      "rf_roc_auc": 0.4245631420201331,
+      "rf_pr_auc": 0.05394523735290088,
+      "rf_f1": 0.12143671607753706
+    }
+  }
+}

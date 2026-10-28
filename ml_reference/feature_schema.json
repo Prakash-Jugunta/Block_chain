@@ -1,0 +1,31 @@
+{
+  "feature_count": 22,
+  "features": [
+    "peer_connectivity",
+    "latency_mean_10",
+    "latency_var_10",
+    "prop_time_mean_10",
+    "churn_rate_100",
+    "tip_height_var",
+    "competing_tips",
+    "node_view_disagreement",
+    "avg_block_interval_10",
+    "block_interval_var_10",
+    "stale_rate_10",
+    "time_since_last_fork",
+    "fork_count_10",
+    "reorg_count_10",
+    "pending_tx_count",
+    "tx_backlog_growth_10",
+    "processed_tps_10",
+    "cfg_mean_latency_ms",
+    "cfg_mean_prop_delay_ms",
+    "cfg_block_interval_sec",
+    "cfg_tx_arrival_rate",
+    "cfg_block_capacity"
+  ],
+  "horizon": 3,
+  "label": "label_fork_h3",
+  "sampling_unit": "unique_block_height_anchored_first_proposal",
+  "schema_version": "v1.3"
+}

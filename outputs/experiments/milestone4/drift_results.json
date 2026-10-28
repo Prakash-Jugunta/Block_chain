@@ -1,0 +1,31 @@
+{
+  "window_size": 200,
+  "threshold_sigma": 2.0,
+  "monitored_feature": "latency_mean_10",
+  "variance_floor": 1e-06,
+  "target_scenario": "dynamic_network",
+  "transition_proposal": 5000,
+  "test_seeds_count": 27,
+  "test_seeds": "4..30",
+  "detected_seeds_count": 27,
+  "undetected_seeds_count": 0,
+  "transition_detection_rate": 1.0,
+  "detection_delay_proposals": {
+    "min": 1,
+    "p25": 1.0,
+    "median": 1.0,
+    "mean": 1.0,
+    "p75": 1.0,
+    "p95": 1.0,
+    "max": 1
+  },
+  "pre_transition_false_positive_rate": 0.0433,
+  "pre_transition_alarms": 935,
+  "pre_transition_evaluation_points": 21600,
+  "post_transition_ongoing_alarm_rate": 0.0786,
+  "post_transition_detections": 2122,
+  "post_transition_points": 27000,
+  "mean_detection_delay_proposals": 1.0,
+  "status": "verified",
+  "mechanistic_notes": "All 27 held-out seeds detect the transition at proposal 5,001 (delay = 1 proposal, 100% transition detection rate). The 7.86% ongoing alarm rate across the subsequent 5,000 post-transition proposals reflects the natural re-adaptation of the sliding window to the higher latency distribution once W=200 observations enter the reference window."
+}

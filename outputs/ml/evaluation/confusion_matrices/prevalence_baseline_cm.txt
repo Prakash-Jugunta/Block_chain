@@ -1,0 +1,8 @@
+Model: PrevalenceBaseline
+Split: test (Threshold: 0.50)
+
+                Predicted Negative    Predicted Positive
+Actual Negative            0 (TN)                790 (FP)
+Actual Positive            0 (FN)                818 (TP)
+
+Total: 1608 | Accuracy: 0.5087 | Precision: 0.5087 | Recall: 1.0000 | F1: 0.6744

@@ -1,0 +1,23 @@
+# Production Block-rate stress scenario — §6 of CASE_STUDY_DEMO_PLAN.md
+# Independent variable: block interval 1.0s → 0.2s (5× faster production rate).
+name: block_rate_stress
+num_nodes: 10
+block_interval_sec: 0.2
+block_jitter_sec: 0.02
+mean_latency_ms: 50.0
+latency_jitter_ms: 10.0
+mean_prop_delay_ms: 100.0
+prop_delay_jitter_ms: 20.0
+sim_duration_sec: 0.0
+max_blocks: 10000
+seed: 1
+output_dir: outputs/experiments/milestone4/runs
+peers_per_node: 3
+tx_per_block: 10
+churn_enabled: true
+churn_mean_on_sec: 100.0
+churn_mean_off_sec: 1.0
+tx_arrival_rate: 1.0
+warm_up_blocks: 1000
+confirmation_depth: 6
+settlement_grace_sec: 10.0

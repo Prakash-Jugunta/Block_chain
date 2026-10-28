@@ -1,0 +1,8 @@
+Model: LogisticRegression
+Split: test (Threshold: 0.30)
+
+                Predicted Negative    Predicted Positive
+Actual Negative          464 (TN)                326 (FP)
+Actual Positive           73 (FN)                745 (TP)
+
+Total: 1608 | Accuracy: 0.7519 | Precision: 0.6956 | Recall: 0.9108 | F1: 0.7888

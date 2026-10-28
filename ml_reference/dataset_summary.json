@@ -1,0 +1,12 @@
+{
+  "dataset_filename": "fork_risk_dataset.csv",
+  "feature_columns": 22,
+  "file_size_bytes": 1151240,
+  "label_column": "label_fork_h3",
+  "metadata_columns": 5,
+  "schema_version": "v1.3",
+  "sha256": "62a1d17ae308ab7279343dd5f001329abae805a1d17503619b4660ca3251bee5",
+  "source_runs": 24,
+  "total_columns": 28,
+  "total_rows": 4258
+}

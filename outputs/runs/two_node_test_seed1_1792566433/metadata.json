@@ -1,0 +1,37 @@
+{
+  "run_id": "two_node_test_seed1_1792566433",
+  "scenario_name": "two_node_test",
+  "seed": 1,
+  "timestamp_utc": "2026-10-21T07:07:13Z",
+  "go_version": "go1.25.1",
+  "platform": "windows/amd64",
+  "git_commit": "unversioned",
+  "config": {
+    "Name": "two_node_test",
+    "NumNodes": 2,
+    "BlockIntervalSec": 1,
+    "BlockJitterSec": 0.05,
+    "ProposerSelection": "uniform_random",
+    "SettlementGraceSec": 5,
+    "MeanLatencyMs": 200,
+    "LatencyJitterMs": 20,
+    "MeanPropDelayMs": 200,
+    "PropDelayJitterMs": 20,
+    "SimDurationSec": 60,
+    "MaxBlocks": 0,
+    "Seed": 1,
+    "OutputDir": "outputs/runs",
+    "PeersPerNode": 1,
+    "TxPerBlock": 5
+  },
+  "proposed_blocks": 61,
+  "processed_events": 183,
+  "sim_duration_sec": 60.135674224016185,
+  "settled_duration_sec": 60.91169475392081,
+  "divergent_tips": 0,
+  "node_tip_heights": {
+    "N0": 61,
+    "N1": 61
+  },
+  "log_sha256": "98cf2600bfaa3397ad6815df0999124e29f257bc6b2d1dd636296031905b85e0"
+}

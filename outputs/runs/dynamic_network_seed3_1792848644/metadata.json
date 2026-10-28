@@ -1,0 +1,59 @@
+{
+  "run_id": "dynamic_network_seed3_1792848644",
+  "scenario_name": "dynamic_network",
+  "seed": 3,
+  "timestamp_utc": "2026-10-24T13:30:44Z",
+  "go_version": "go1.25.1",
+  "platform": "windows/amd64",
+  "git_commit": "unversioned",
+  "config": {
+    "name": "dynamic_network",
+    "num_nodes": 10,
+    "block_interval_sec": 1,
+    "block_jitter_sec": 0.1,
+    "proposer_selection": "uniform_random",
+    "settlement_grace_sec": 10,
+    "mean_latency_ms": 50,
+    "latency_jitter_ms": 10,
+    "mean_prop_delay_ms": 100,
+    "prop_delay_jitter_ms": 20,
+    "sim_duration_sec": 300,
+    "max_blocks": 0,
+    "seed": 3,
+    "output_dir": "outputs/runs",
+    "peers_per_node": 3,
+    "tx_per_block": 10,
+    "churn_enabled": true,
+    "churn_mean_on_sec": 100,
+    "churn_mean_off_sec": 1,
+    "tx_arrival_rate": 1,
+    "block_capacity": 0,
+    "warm_up_blocks": 0,
+    "confirmation_depth": 6,
+    "dynamic_events": [
+      {
+        "at_block": 150,
+        "mean_latency_ms": 300,
+        "latency_jitter_ms": 30
+      }
+    ]
+  },
+  "proposed_blocks": 299,
+  "processed_events": 8471,
+  "sim_duration_sec": 300.26287674836163,
+  "settled_duration_sec": 309.74943764754545,
+  "divergent_tips": 5,
+  "node_tip_heights": {
+    "N0": 75,
+    "N1": 148,
+    "N2": 192,
+    "N3": 110,
+    "N4": 192,
+    "N5": 88,
+    "N6": 192,
+    "N7": 152,
+    "N8": 192,
+    "N9": 192
+  },
+  "log_sha256": "2ab4d0ac32d3d71e0af909154a6eca92d3ea5f43dbab9099df0f4c2bc3b2cecb"
+}

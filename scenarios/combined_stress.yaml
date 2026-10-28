@@ -1,0 +1,26 @@
+# Combined stress scenario — §6 of CASE_STUDY_DEMO_PLAN.md
+# Simultaneous scaling of latency + propagation + block-rate.
+# Latency: 50ms → 300ms, Prop delay: 100ms → 600ms, Block interval: 1.0s → 0.3s.
+# The plan states "Uptime remains 99%", so churn is enabled at baseline levels.
+# settlement_grace_sec increased to drain high-latency messages.
+name: combined_stress
+num_nodes: 10
+block_interval_sec: 0.3
+block_jitter_sec: 0.05
+mean_latency_ms: 300.0
+latency_jitter_ms: 30.0
+mean_prop_delay_ms: 600.0
+prop_delay_jitter_ms: 60.0
+sim_duration_sec: 300.0
+max_blocks: 0
+seed: 42
+output_dir: outputs/runs
+peers_per_node: 3
+tx_per_block: 10
+churn_enabled: true
+churn_mean_on_sec: 100.0
+churn_mean_off_sec: 1.0
+tx_arrival_rate: 1.0
+warm_up_blocks: 0
+confirmation_depth: 6
+settlement_grace_sec: 30.0

@@ -1,0 +1,8 @@
+Model: RandomForest
+Split: test (Threshold: 0.20)
+
+                Predicted Negative    Predicted Positive
+Actual Negative          307 (TN)                483 (FP)
+Actual Positive           26 (FN)                792 (TP)
+
+Total: 1608 | Accuracy: 0.6835 | Precision: 0.6212 | Recall: 0.9682 | F1: 0.7568
