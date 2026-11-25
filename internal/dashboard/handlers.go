@@ -73,7 +73,7 @@ func (h *Handler) HandleRuns(w http.ResponseWriter, r *http.Request) {
 	})
 }
 
-// HandleRunDetail routes requests for /api/runs/{runID} or sub-paths (/nodes, /timeline).
+// HandleRunDetail routes requests for a run and its recorded telemetry.
 func (h *Handler) HandleRunDetail(w http.ResponseWriter, r *http.Request) {
 	if !EnsureGet(w, r) {
 		return
@@ -102,9 +102,44 @@ func (h *Handler) HandleRunDetail(w http.ResponseWriter, r *http.Request) {
 		writeJSON(w, http.StatusOK, detail)
 		return
 	}
+	if len(parts) != 2 {
+		writeError(w, http.StatusNotFound, "Unknown run sub-resource")
+		return
+	}
 
 	action := parts[1]
 	switch action {
+	case "logs", "replay":
+		h.handleRecording(w, r, runID, action == "replay")
+	case "replay-index":
+		dir, err := h.Loader.findRunDir(runID)
+		if err != nil {
+			writeError(w, http.StatusNotFound, err.Error())
+			return
+		}
+		index, err := indexRecording(r.Context(), dir)
+		if err != nil {
+			writeError(w, http.StatusInternalServerError, "Could not index the run recording")
+			return
+		}
+		writeJSON(w, http.StatusOK, index)
+	case "forecast":
+		dir, err := h.Loader.findRunDir(runID)
+		if err != nil {
+			writeError(w, http.StatusNotFound, err.Error())
+			return
+		}
+		position, err := strconv.Atoi(r.URL.Query().Get("position"))
+		if err != nil || position < 1 {
+			writeError(w, http.StatusBadRequest, "Provide a positive recorded event position")
+			return
+		}
+		forecast, err := h.Loader.getReplayForecast(r.Context(), dir, position)
+		if err != nil {
+			writeError(w, http.StatusInternalServerError, "Could not compute the replay forecast")
+			return
+		}
+		writeJSON(w, http.StatusOK, forecast)
 	case "nodes":
 		nodes, err := h.Loader.GetRunNodes(runID)
 		if err != nil {
@@ -176,6 +211,32 @@ func (h *Handler) HandleRunDetail(w http.ResponseWriter, r *http.Request) {
 	default:
 		writeError(w, http.StatusNotFound, "Unknown run sub-resource")
 	}
+}
+
+func (h *Handler) handleRecording(w http.ResponseWriter, r *http.Request, runID string, replay bool) {
+	dir, err := h.Loader.findRunDir(runID)
+	if err != nil {
+		writeError(w, http.StatusNotFound, err.Error())
+		return
+	}
+	query := r.URL.Query()
+	limit, _ := strconv.Atoi(query.Get("limit"))
+	if limit <= 0 {
+		limit = 100
+	}
+	offset, _ := strconv.Atoi(query.Get("offset"))
+	filter := recordingFilter{limit: min(limit, 500), offset: max(offset, 0)}
+	if !replay {
+		filter.eventType = strings.TrimSpace(query.Get("type"))
+		filter.node = strings.TrimSpace(query.Get("node"))
+		filter.query = strings.TrimSpace(query.Get("q"))
+	}
+	page, err := readRecording(r.Context(), dir, filter, replay)
+	if err != nil {
+		writeError(w, http.StatusInternalServerError, "Could not read the run recording")
+		return
+	}
+	writeJSON(w, http.StatusOK, page)
 }
 
 // HandleScenariosSummary returns aggregated experiment matrix results.

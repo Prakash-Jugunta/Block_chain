@@ -2,11 +2,12 @@ package dashboard
 
 import (
 	"context"
-	"fmt"
 	"log"
+	"net"
 	"net/http"
 	"os"
 	"path/filepath"
+	"strconv"
 	"strings"
 	"time"
 )
@@ -79,7 +80,7 @@ func NewServer(cfg ServerConfig) *Server {
 		fileServer.ServeHTTP(w, r)
 	})
 
-	addr := fmt.Sprintf("%s:%d", cfg.Host, cfg.Port)
+	addr := net.JoinHostPort(cfg.Host, strconv.Itoa(cfg.Port))
 	srv := &http.Server{
 		Addr:         addr,
 		Handler:      mux,
@@ -98,10 +99,19 @@ func NewServer(cfg ServerConfig) *Server {
 
 // Start begins listening and serving HTTP requests.
 func (s *Server) Start() error {
-	log.Printf("[Dashboard] Server listening at http://%s:%d\n", s.cfg.Host, s.cfg.Port)
+	listener, err := net.Listen("tcp", s.Addr())
+	if err != nil {
+		return err
+	}
+	return s.Serve(listener)
+}
+
+// Serve accepts dashboard requests on an already bound listener.
+func (s *Server) Serve(listener net.Listener) error {
+	log.Printf("[Dashboard] Server listening at http://%s\n", listener.Addr())
 	log.Printf("[Dashboard] Serving static assets from: %s\n", s.cfg.WebDir)
 	log.Printf("[Dashboard] Data directory: %s\n", s.cfg.DataDir)
-	return s.httpServer.ListenAndServe()
+	return s.httpServer.Serve(listener)
 }
 
 // Shutdown gracefully stops the server.

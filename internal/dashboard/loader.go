@@ -42,6 +42,8 @@ func NewDataLoader(baseDir string) *DataLoader {
 
 // ListRuns returns all discoverable simulation runs across pilot, experiment, and demo directories.
 func (dl *DataLoader) ListRuns() ([]RunSummaryItem, error) {
+	var items []RunSummaryItem
+	seen := make(map[string]bool)
 	manifestPath := filepath.Join(dl.BaseDir, "experiments", "milestone4", "run_manifest.json")
 	if data, err := os.ReadFile(manifestPath); err == nil {
 		var manifest struct {
@@ -57,9 +59,12 @@ func (dl *DataLoader) ListRuns() ([]RunSummaryItem, error) {
 			} `json:"runs"`
 		}
 		if err := json.Unmarshal(data, &manifest); err == nil && len(manifest.Runs) > 0 {
-			res := make([]RunSummaryItem, len(manifest.Runs))
-			for i, r := range manifest.Runs {
-				res[i] = RunSummaryItem{
+			for _, r := range manifest.Runs {
+				if seen[r.RunID] || ValidateRunID(r.RunID) != nil {
+					continue
+				}
+				seen[r.RunID] = true
+				items = append(items, RunSummaryItem{
 					RunID:          r.RunID,
 					Scenario:       r.Scenario,
 					Seed:           r.Seed,
@@ -68,18 +73,17 @@ func (dl *DataLoader) ListRuns() ([]RunSummaryItem, error) {
 					ForkRate:       r.ForkRate,
 					StaleRate:      r.StaleRate,
 					LogPath:        r.LogPath,
-				}
+					LogAvailable:   dl.HasEventLog(r.RunID),
+				})
 			}
-			return res, nil
 		}
 	}
 
 	// Fallback to scanning run directories
-	var items []RunSummaryItem
 	candidateDirs := []string{
+		filepath.Join(dl.BaseDir, "experiments", "milestone4", "runs"),
 		filepath.Join(dl.BaseDir, "runs"),
 		filepath.Join(dl.BaseDir, "demo", "runs"),
-		filepath.Join(dl.BaseDir, "experiments", "milestone4", "runs"),
 	}
 
 	for _, cDir := range candidateDirs {
@@ -88,16 +92,19 @@ func (dl *DataLoader) ListRuns() ([]RunSummaryItem, error) {
 			continue
 		}
 		for _, e := range entries {
-			if e.IsDir() {
+			if e.IsDir() && !seen[e.Name()] && ValidateRunID(e.Name()) == nil {
 				runID := e.Name()
 				metaFile := filepath.Join(cDir, runID, "metadata.json")
 				logFile := filepath.Join(cDir, runID, "events.jsonl")
 
-				if _, err := os.Stat(logFile); err == nil {
+				_, metaErr := os.Stat(metaFile)
+				logAvailable := dl.HasEventLog(runID)
+				if metaErr == nil || logAvailable {
 					item := RunSummaryItem{
-						RunID:   runID,
-						Status:  "completed",
-						LogPath: logFile,
+						RunID:        runID,
+						Status:       "completed",
+						LogPath:      logFile,
+						LogAvailable: logAvailable,
 					}
 					if metaBytes, err := os.ReadFile(metaFile); err == nil {
 						var meta logstore.RunMetadata
@@ -108,6 +115,7 @@ func (dl *DataLoader) ListRuns() ([]RunSummaryItem, error) {
 						}
 					}
 					items = append(items, item)
+					seen[runID] = true
 				}
 			}
 		}
@@ -391,12 +399,12 @@ func (dl *DataLoader) GetRunNodes(runID string) ([]NodeStatus, error) {
 		}
 	}
 
-	nodeMap := make(map[string]*NodeStatus)
+	nodeMap := make(map[string]NodeStatus)
 	// Initialize all configured nodes to an explicit unrecorded state
 	// so nodes with no event records are truthfully represented without fabricating tips or availability.
 	for i := 0; i < configuredNodes; i++ {
 		id := fmt.Sprintf("N%d", i)
-		nodeMap[id] = &NodeStatus{
+		nodeMap[id] = NodeStatus{
 			NodeID:  id,
 			Online:  false,
 			Peers:   defaultPeers,
@@ -425,68 +433,21 @@ func (dl *DataLoader) GetRunNodes(runID string) ([]NodeStatus, error) {
 			continue
 		}
 
-		nodeID := entry.NodeID
-		if nodeID == "" {
-			nodeID = entry.ProposerID
-		}
-		if nodeID == "" {
-			continue
-		}
-
-		status, exists := nodeMap[nodeID]
-		if !exists {
-			status = &NodeStatus{
-				NodeID:  nodeID,
-				Online:  true,
-				Peers:   defaultPeers,
-				TipHash: "unknown",
-				Height:  0,
-				State:   "active",
-			}
-			nodeMap[nodeID] = status
-		}
-		if status.State == "unrecorded" {
-			status.State = "active"
-			status.Online = true
-		}
-
-		switch entry.EventType {
-		case "BlockPropose":
-			if entry.BlockHeight > status.Height {
-				status.Height = entry.BlockHeight
-			}
-			if entry.BlockHash != "" {
-				shortHash := entry.BlockHash
-				if len(shortHash) > 10 {
-					shortHash = shortHash[:10]
-				}
-				status.TipHash = shortHash
-			}
-		case "TipUpdate", "BlockArrive":
-			if entry.TipHeight > status.Height {
-				status.Height = entry.TipHeight
-			}
-			if entry.TipHash != "" {
-				shortHash := entry.TipHash
-				if len(shortHash) > 10 {
-					shortHash = shortHash[:10]
-				}
-				status.TipHash = shortHash
-			}
-		case "ChurnToggle":
-			if entry.Reason == "offline" {
-				status.Online = false
-				status.State = "offline"
-			} else if entry.Reason == "online" {
-				status.Online = true
-				status.State = "active"
-			}
-		}
+		applyRecordedNodeEvent(nodeMap, entry)
+	}
+	if err := scanner.Err(); err != nil {
+		return nil, err
 	}
 
 	var res []NodeStatus
-	for _, n := range nodeMap {
-		res = append(res, *n)
+	for _, node := range nodeMap {
+		node.Peers = defaultPeers
+		if node.TipHash == "" {
+			node.TipHash = "unknown"
+		} else if node.TipHash != "unrecorded" {
+			node.TipHash = node.TipHash[:min(10, len(node.TipHash))]
+		}
+		res = append(res, node)
 	}
 
 	// Natural sort by node ID (N0, N1, ..., N9, N10)

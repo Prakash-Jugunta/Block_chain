@@ -25,6 +25,7 @@ type RunSummaryItem struct {
 	ForkRate       float64 `json:"fork_rate,omitempty"`
 	StaleRate      float64 `json:"stale_rate,omitempty"`
 	LogPath        string  `json:"log_path"`
+	LogAvailable   bool    `json:"log_available"`
 }
 
 // RunDetail contains the complete configuration, metrics, and summary for a run.

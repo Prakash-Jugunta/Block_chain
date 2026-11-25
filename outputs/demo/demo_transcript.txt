@@ -1,25 +1,61 @@
 ================================================================================
  ForkRisk — Milestone 5 End-to-End Demonstration
  Predicting Network-Induced Fork Risk in Blockchain Networks
- Mode: FALLBACK | Date: 2026-10-26T06:41:36Z | Toolchain: Go 1.25.1 windows/amd64
+ Mode: LIVEJU | Date: 2026-10-29T08:15:13Z | Toolchain: Go 1.25.1 windows/amd64
 ================================================================================
 
->>> RUNNING VERIFIED FALLBACK DEMONSTRATION...
-Notice: Clearly distinguishing precomputed stored evidence from live-executed verification.
+>>> STEP 1: Running Seeded Baseline Simulation (Calm Conditions)...
+  ✓ Baseline simulation finished: 100 proposals generated (Seed 42)
+    Event log: outputs\demo\runs\demo_baseline\events.jsonl
 
-[LIVE VERIFICATION] Executing fast 50-block deterministic simulation replay (Seed 7)...
-  ✓ Live Replay Completed (50 proposals generated in pure Go).
-  ✓ Event Log Determinism: Byte-identical reproduction confirmed.
+>>> STEP 2: Running Seeded Stress Simulation (Latency 300ms, Prop Delay 800ms)...
+  ✓ Stress simulation finished: 100 proposals generated (Seed 42)
+    Event log: outputs\demo\runs\demo_stress\events.jsonl
 
-[STORED EVIDENCE] Summary of Precomputed Production Matrix (240 Runs, 2.4M Proposals):
-  - Matrix Audit: verification/matrix_audit.json (240 / 240 Completed, 0 Failed, 0 Missing)
-  - SHA-256 Re-Hash Audit: verification/audit_report.md (100.0% Event Log Hash Agreement)
-  - Production Evaluation: outputs/experiments/milestone4/production_eval_metrics.json
-    * Total Unseen Test Samples: 57,062 (Seeds 4–30)
-    * Logistic Regression ROC-AUC: 0.7435 | PR-AUC: 0.1996
-  - Concept Drift: outputs/experiments/milestone4/drift_report.md (W=200, theta=2.0sigma, FPR 4.33%)
-  - Research Report: docs/report.md
+>>> STEP 3: Computing & Comparing Simulation Metrics...
 
+Metric                    | Baseline (Calm)  | Stress (Network Delay)
+---------------------------------------------------------------
+Fork Rate                 |          0.0000% |         50.0000%
+Stale Block Rate          |          0.0000% |         50.0000%
+Fork Episodes             |               0 |              40
+Mean Prop Delay           |          0.1515s |          1.1124s
+P95 Prop Delay            |          0.1529s |          1.1210s
+Offered TPS               |            0.00 |            0.00
+Processed TPS             |            0.00 |            0.00
+Finalized Goodput         |            0.00 |            0.00
+Node Consistency          |          0.9000 |          0.8275
+
+  Comparison Insight: Under 800ms propagation delay, fork episodes emerge as block transmission time approaches proposal interval.
+
+>>> STEP 4: Demonstrating Causal Dataset Feature Extraction...
+  Extracted sample observation at Block Height 34 (Proposal #66):
+  Ground-Truth Target Label (H=3): 0 (NO FORK (Negative))
+  Causal Features (Selected Subset):
+    - prop_time_mean_10:         1.1135s
+    - competing_tips:            1
+    - tip_height_variance:       273.9475
+    - node_view_disagreement:    1.0000
+    - peer_connectivity:         1.0000
+    - active_block_interval:     1.00s
+  ✓ Causality Verified: Features strictly computed from events <= T_proposal (Zero Future Leakage).
+
+>>> STEP 5 & 6: Evaluating Models on Held-Out Test Data (Seed 3)...
+  Evaluation Scope: 1608 held-out test samples across 8 scenarios (Seed 3)
+  Test Set Positive Prevalence: 50.87%
+
+Model                     | ROC-AUC   | PR-AUC    | F1 Score  | Precision | Recall    | Brier    
+-------------------------------------------------------------------------------------
+ConstantNoForkBaseline    |    0.5000 |    0.5087 |    0.0000 |    0.0000 |    0.0000 |    0.5087
+PrevalenceBaseline        |    0.5000 |    0.5087 |    0.6744 |    0.5087 |    1.0000 |    0.2500
+HeuristicBaseline         |    0.5842 |    0.5546 |    0.7135 |    0.5546 |    1.0000 |    0.2851
+LogisticRegression        |    0.8124 |    0.7817 |    0.7888 |    0.6956 |    0.9108 |    0.1752
+RandomForest              |    0.8139 |    0.7920 |    0.7676 |    0.6521 |    0.9328 |    0.1788
+
+  Logistic Regression Confusion Matrix (Threshold = 0.30):
+    TP=745, FP=326, FN=73, TN=464
+
+>>> STEP 7: Forecast Horizon Sensitivity Summary (H=1..5)...
   Horizon  | Rows       | Prevalence | LR ROC-AUC  | RF ROC-AUC 
   ----------------------------------------------------------
   H = 1    | 4306       |     30.54% |      0.7547 |      0.7439
@@ -28,8 +64,27 @@ Notice: Clearly distinguishing precomputed stored evidence from live-executed ve
   H = 4    | 4234       |     59.57% |      0.8440 |      0.8267
   H = 5    | 4210       |     63.82% |      0.8621 |      0.8567
 
+>>> STEP 8: Final Report & Publication Visualizations Inventory...
+  Comprehensive Report: docs/report.md (mirrored at outputs/final_evaluation/report.md)
+  Publication Visualizations (10 pure-Go PNG charts):
+    [EXISTS] docs/figures/fork_rate_by_scenario.png
+    [EXISTS] docs/figures/stale_rate_by_scenario.png
+    [EXISTS] docs/figures/propagation_performance.png
+    [EXISTS] docs/figures/node_view_consistency.png
+    [EXISTS] docs/figures/roc_curves.png
+    [EXISTS] docs/figures/precision_recall_curves.png
+    [EXISTS] docs/figures/feature_importance.png
+    [EXISTS] docs/figures/tps_vs_fork_rate.png
+    [EXISTS] docs/figures/goodput_vs_fork_rate.png
+    [EXISTS] docs/figures/horizon_sensitivity.png
+
+>>> STEP 9: Research Limitations & Handoff Summary...
+  1. Deterministic Simulation: Correlational risk signal, not physical causality.
+  2. P2P Gossip Simplification: Synthetic Gamma delay sampling; no partial topology or relay caches.
+  3. Zero-Shot Boundary: Good pooled performance does not imply direct transfer to unseen network environments.
+  4. Consensus Handoff: This verified predictor provides the foundation for the end-sem adaptive controller.
 
 === DEMONSTRATION COMPLETE (Exit Code: 0) ===
 Transcripts recorded to:
   - outputs/demo/demo_transcript.txt
-  - outputs\demo\fallback_demo_transcript.txt
+  - outputs\demo\liveju_demo_transcript.txt

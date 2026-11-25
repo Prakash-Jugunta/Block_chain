@@ -92,7 +92,7 @@ ForkRisk provides a rigorous, end-to-end experimental framework to study and pre
 | **Configuration** | Parser | `gopkg.in/yaml.v3` v3.0.1 | Robust YAML scenario deserialization and schema validation. |
 | **Web Server** | HTTP Backend | `net/http` (Stdlib) | Built-in HTTP server with sub-millisecond response times, zero external framework attack surface. |
 | **Web Frontend** | Dashboard UI | Vanilla HTML5 / CSS3 / ES6 | Modern dark-mode interface with CSS custom properties, glassmorphism, responsive grid layouts. |
-| **Frontend Charts**| Dashboard Visualizer | Chart.js v4.4.1 (Embedded) | Grouped bar charts, time-series line plots, and radar charts for in-browser visual inspection. |
+| **Frontend Visualizations** | Dashboard | HTML, CSS, and Canvas | Scenario comparisons and event-by-event node replay without external assets. |
 
 ---
 
@@ -182,7 +182,7 @@ flowchart TD
 - [`internal/node/`](file:///e:/sem7/blockchain/casestudy/internal/node/): Node state representation, local blockchain tree, block validation, and tip selection.
 - [`internal/viz/`](file:///e:/sem7/blockchain/casestudy/internal/viz/): Pure-Go publication chart renderer using `gonum/plot`.
 - [`internal/dashboard/`](file:///e:/sem7/blockchain/casestudy/internal/dashboard/): HTTP server, REST API routing, data loading, and summary-only run fallback logic.
-- [`web/`](file:///e:/sem7/blockchain/casestudy/web/): Static frontend web assets (HTML, CSS, JavaScript, and embedded Chart.js).
+- [`web/`](web/): Static frontend web assets (HTML, CSS, and JavaScript).
 
 ---
 
@@ -243,7 +243,7 @@ casestudy/
 │   ├── index.html                  # Single-Page Application HTML5 Structure
 │   ├── styles.css                  # Dark-Mode Styling (CSS Grid, Glassmorphism)
 │   ├── app.js                      # Application Controller, API Fetching, Navigation
-│   └── charts.js                   # Chart.js Integration & Rendering
+│   └── recordings.js               # Event log inspector and node replay
 │
 ├── docs/                           # Research Documentation & Figures
 │   ├── decisions.md                # Architectural Decision Records (D1–D44)
@@ -369,12 +369,12 @@ http://localhost:8080
 ```
 
 **Dashboard Features:**
-- **Overview:** KPI cards showing total analyzed blocks, production runs, overall fork rate, mean propagation delay, best model ROC-AUC, and drift detection performance.
-- **Run Inspector:** Browse all 240 production runs and pilot runs. Packaged production runs display a clean **Summary-Only** badge, obtaining metrics directly from canonical CSVs without requiring heavy event logs.
-- **Node Status:** Real-time view of individual node tips, heights, peer connections, and mempool queues.
-- **Fork Timeline:** Paginated sequence of block proposals, branch competitions, orphan events, and reorgs with proposal-index filtering.
-- **Scenario Matrix:** Compare fork rates, stale rates, goodput, and propagation times across all 8 scenarios with responsive grouped charts.
-- **Models & Sensitivity:** Inspect Logistic Regression vs. Random Forest ROC/PR curves, confusion matrices, and the empirical forecast horizon sweep ($H=1..5$).
+- **Overview** compares fork rates, stale rates, goodput, propagation delay, and consistency across experiment scenarios.
+- **Node replay** animates block creation and highlights competing branches in red. Jump between recorded forks, scrub through the full run, trace a block in the logs, or copy a link to the current event. The forecast compares logistic regression and random forest using their saved warning thresholds. Switch to All events for individual transmissions and node updates.
+- **Event logs** supports filtering by event type, participant, and text. Each matching row opens its JSON record or jumps to its position in the replay.
+- **Fork timeline** shows proposals, competing branches, orphan events, and reorgs with proposal-index filtering.
+- **Run details** shows configuration, post-settlement metrics, and a final node snapshot when the event log is available. Packaged summary-only runs use the canonical CSV metrics.
+- **Model evaluation** shows benchmark metrics, the logistic regression confusion matrix, drift detection, and forecast horizon sensitivity.
 
 *To stop the dashboard server, press `Ctrl+C` in your terminal for graceful shutdown.*
 
@@ -518,6 +518,12 @@ curl http://localhost:8080/api/runs/baseline_seed1
 
 # Inspect node status for a run:
 curl http://localhost:8080/api/runs/baseline_seed1/nodes
+
+# Browse raw events for a recorded run (use a run ID under Recorded runs):
+curl "http://localhost:8080/api/runs/demo_baseline/logs?type=BlockArrive&node=N2&limit=20"
+
+# Load a replay segment, with node state after the first 100 recorded events:
+curl "http://localhost:8080/api/runs/demo_baseline/replay?offset=100&limit=20"
 
 # Query paginated fork timeline (supports limit, offset, from_proposal):
 curl "http://localhost:8080/api/runs/baseline_seed1/timeline?limit=20&from_proposal=100"
@@ -775,7 +781,7 @@ ForkRisk guarantees exact, bit-for-bit reproducibility:
 ## 12. Troubleshooting
 
 ### 1. Port 8080 Already in Use
-If another service occupies port 8080 when launching the dashboard:
+When started without `--port`, the dashboard tries port 8081 if it cannot open 8080. Open the address printed in the terminal. To select port 8081 explicitly:
 ```bash
 go run ./cmd/dashboard --port 8081
 ```

@@ -1,314 +1,206 @@
-<!DOCTYPE html>
+﻿<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ForkRisk — Blockchain Fork Risk Intelligence Dashboard</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <!-- Chart.js for data visualization -->
-  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
-  <link rel="stylesheet" href="styles.css">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#101613">
+  <title>ForkRisk | Simulation Dashboard</title>
+  <link rel="stylesheet" href="/styles.css">
+  <script defer src="/app.js"></script>
+  <script defer src="/chain.js"></script>
+  <script defer src="/replay-tools.js"></script>
+  <script defer src="/recordings.js"></script>
 </head>
 <body>
-  <div class="app-container">
-    <!-- Sidebar Navigation -->
+  <a class="skip-link" href="#workspace">Skip to workspace</a>
+  <div class="layout">
     <aside class="sidebar">
-      <div class="sidebar-brand">
-        <div class="brand-icon">⚡</div>
-        <div class="brand-text">
-          <h2>ForkRisk</h2>
-          <span>Consensus Intelligence</span>
-        </div>
-      </div>
-
-      <nav class="sidebar-nav">
-        <button class="nav-item active" data-tab="tab-overview">
-          <span class="icon">📊</span>
-          <span>Overview</span>
-        </button>
-        <button class="nav-item" data-tab="tab-inspector">
-          <span class="icon">🔍</span>
-          <span>Run Inspector</span>
-        </button>
-        <button class="nav-item" data-tab="tab-nodes">
-          <span class="icon">🖥️</span>
-          <span>Node Status</span>
-        </button>
-        <button class="nav-item" data-tab="tab-timeline">
-          <span class="icon">⏱️</span>
-          <span>Fork Timeline</span>
-        </button>
-        <button class="nav-item" data-tab="tab-scenarios">
-          <span class="icon">📈</span>
-          <span>Scenario Matrix</span>
-        </button>
-        <button class="nav-item" data-tab="tab-models">
-          <span class="icon">🤖</span>
-          <span>Models & Sensitivity</span>
-        </button>
+      <a class="brand" href="#overview">
+        <span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i></span>
+        <span><strong>ForkRisk</strong><small>Simulation dashboard</small></span>
+      </a>
+      <nav aria-label="Workspace">
+        <button type="button" data-view="overview"><span aria-hidden="true">&#8862;</span>Overview</button>
+        <button type="button" data-view="replay"><span aria-hidden="true">&#9655;</span>Node replay</button>
+        <button type="button" data-view="logs"><span aria-hidden="true">&#9776;</span>Event logs</button>
+        <button type="button" data-view="timeline"><span aria-hidden="true">&#8936;</span>Fork timeline</button>
+        <button type="button" data-view="run"><span aria-hidden="true">&#9678;</span>Run details</button>
+        <button type="button" data-view="models"><span aria-hidden="true">&#9641;</span>Model evaluation</button>
       </nav>
-
-      <div class="sidebar-footer">
-        <div class="milestone-badge">
-          <span class="dot live"></span> Milestones 1–6 Verified
-        </div>
-        <div class="system-meta" id="system-meta">
-          <span>Pure Go Engine</span>
-          <span id="go-version-label">Go 1.25.1</span>
-        </div>
+      <div class="sidebar-bottom">
+        <p class="connection" id="connection" role="status">Connecting to API</p>
+        <small id="engine-version">Simulation engine</small>
       </div>
     </aside>
 
-    <!-- Main Content Area -->
-    <main class="main-content">
-      <!-- Top Header -->
-      <header class="top-header">
-        <div class="header-left">
-          <h1 id="page-title">Experimental Overview & Telemetry</h1>
-          <p class="subtitle">Predicting Network-Induced Fork Risk in Blockchain Networks</p>
-        </div>
-        <div class="header-right">
-          <div class="run-selector-container">
-            <label for="run-select">Selected Run:</label>
-            <select id="run-select" class="dropdown">
-              <option value="">Loading simulation runs...</option>
-            </select>
-          </div>
-          <button id="refresh-btn" class="btn btn-outline" title="Refresh Telemetry">🔄 Refresh</button>
-        </div>
+    <main id="workspace" tabindex="-1">
+      <header class="toolbar">
+        <label for="run-select">Simulation run</label>
+        <select id="run-select" disabled><option>Loading runs...</option></select>
+        <button type="button" id="refresh">Refresh</button>
       </header>
 
-      <!-- TAB 1: OVERVIEW -->
-      <section id="tab-overview" class="tab-panel active">
-        <!-- KPI Cards -->
-        <div class="kpi-grid">
-          <div class="kpi-card">
-            <div class="kpi-label">Production Matrix Runs</div>
-            <div class="kpi-value" id="kpi-runs">240 <span class="kpi-sub">/ 240</span></div>
-            <div class="kpi-footer text-success">✓ 100% Deterministic & Audited</div>
+      <section id="view-overview" aria-labelledby="overview-heading">
+        <div class="hero">
+          <div>
+            <h1 id="overview-heading">Experiment overview</h1>
+            <p>Explore how network delays, node churn, and block timing affect blockchain consensus.</p>
+            <button type="button" class="primary" data-open="replay">Open node replay <span aria-hidden="true">&rarr;</span></button>
           </div>
-          <div class="kpi-card">
-            <div class="kpi-label">Total Simulated Proposals</div>
-            <div class="kpi-value" id="kpi-proposals">2,400,000</div>
-            <div class="kpi-footer">Across 8 Stress Scenarios</div>
-          </div>
-          <div class="kpi-card">
-            <div class="kpi-label">Production LR ROC-AUC (H=3)</div>
-            <div class="kpi-value text-accent" id="kpi-roc-auc">0.7435</div>
-            <div class="kpi-footer" id="kpi-roc-auc-sub">Seeds 4–30 (N=57,062) | Pilot: 0.8124 (N=1,608)</div>
-          </div>
-          <div class="kpi-card">
-            <div class="kpi-label">Drift Transition Detection</div>
-            <div class="kpi-value text-success" id="kpi-drift-recall">100.0%</div>
-            <div class="kpi-footer" id="kpi-drift-recall-sub">27/27 seeds detected (delay: 1.0 prop)</div>
-          </div>
-          <div class="kpi-card">
-            <div class="kpi-label">Drift False-Alarm Rate (FPR)</div>
-            <div class="kpi-value text-warning" id="kpi-drift-fpr">4.33%</div>
-            <div class="kpi-footer" id="kpi-drift-fpr-sub">Pre-shift: 4.33% | Post-shift ongoing: 7.86%</div>
+          <div class="hero-diagram" aria-hidden="true">
+            <i></i><i></i><i></i><i></i><i></i><b></b><b></b><b></b><b></b>
           </div>
         </div>
-
-        <!-- Matrix Summary Section -->
-        <div class="panel-card mt-6">
-          <div class="panel-header">
-            <h3>Production Matrix Overview (8 Stress Scenarios, 30 Seeds each)</h3>
-            <span class="badge badge-primary">240 Runs Total</span>
-          </div>
-          <div class="table-responsive">
-            <table class="data-table" id="matrix-overview-table">
-              <thead>
-                <tr>
-                  <th>Scenario Name</th>
-                  <th>Completed Runs</th>
-                  <th>Mean Fork Rate</th>
-                  <th>Mean Stale Rate</th>
-                  <th>Mean Prop Delay</th>
-                  <th>P95 Prop Delay</th>
-                  <th>Finalized Goodput</th>
-                  <th>Node Consistency</th>
-                </tr>
-              </thead>
-              <tbody id="matrix-overview-tbody">
-                <tr><td colspan="8" class="text-center">Loading scenario matrix data...</td></tr>
-              </tbody>
-            </table>
-          </div>
+        <div class="metrics">
+          <article><span>Experiment runs</span><strong id="metric-runs">&mdash;</strong><small id="metric-scenarios">Across the scenario matrix</small></article>
+          <article><span>Runs with recordings</span><strong id="metric-recordings">&mdash;</strong><small>Available for replay and inspection</small></article>
+          <article><span>Logistic regression ROC-AUC</span><strong id="metric-auc">&mdash;</strong><small id="metric-auc-scope">Production evaluation</small></article>
+          <article><span>Drift detection</span><strong id="metric-drift">&mdash;</strong><small id="metric-drift-detail">Transition detection rate</small></article>
         </div>
+        <article class="panel">
+          <div class="panel-heading">
+            <div><h2>Scenario comparison</h2><p>Aggregate results across simulation seeds.</p></div>
+            <label>Metric <select id="scenario-metric">
+              <option value="fork_rate_mean">Fork rate</option><option value="stale_rate_mean">Stale block rate</option>
+              <option value="prop_delay_mean">Mean propagation delay</option><option value="prop_delay_p95">P95 propagation delay</option>
+              <option value="goodput_mean">Finalized goodput</option><option value="node_consistency_mean">Node consistency</option>
+            </select></label>
+          </div>
+          <div id="scenario-chart" class="scenario-chart"></div>
+          <div class="table-scroll"><table>
+            <thead><tr><th>Scenario</th><th>Runs</th><th>Fork rate</th><th>Stale rate</th><th>Mean delay</th><th>P95 delay</th><th>Goodput</th><th>Consistency</th></tr></thead>
+            <tbody id="scenario-rows"></tbody>
+          </table></div>
+          <p class="status" id="scenario-status" role="status">Loading scenario summary...</p>
+        </article>
       </section>
 
-      <!-- TAB 2: RUN INSPECTOR -->
-      <section id="tab-inspector" class="tab-panel">
-        <div class="panel-card">
-          <div class="panel-header">
-            <h3>Run Configuration & Post-Settlement Metrics</h3>
-            <span class="badge badge-success" id="inspector-run-id">demo_baseline</span>
-          </div>
-          <div class="grid-2col">
-            <div class="info-group">
-              <h4>Simulation Parameters</h4>
-              <ul class="meta-list" id="inspector-config-list">
-                <li><span>Scenario:</span> <strong id="cfg-scenario">-</strong></li>
-                <li><span>PRNG Seed:</span> <strong id="cfg-seed">-</strong></li>
-                <li><span>Node Count:</span> <strong id="cfg-nodes">-</strong></li>
-                <li><span>Block Interval:</span> <strong id="cfg-interval">-</strong></li>
-                <li><span>Mean Latency:</span> <strong id="cfg-latency">-</strong></li>
-                <li><span>Mean Prop Delay:</span> <strong id="cfg-prop">-</strong></li>
-                <li><span>Tx Arrival Rate:</span> <strong id="cfg-tx-rate">-</strong></li>
-              </ul>
+      <section id="view-replay" hidden aria-labelledby="replay-heading">
+        <div class="page-heading"><h1 id="replay-heading">Node replay</h1><p>Watch blocks link to their parents and see what the model forecast before a competing branch appeared.</p></div>
+        <div class="chain-layout">
+          <article class="panel chain-panel">
+            <div class="panel-heading"><div><h2>Block creation</h2><p>Each card shows the node that proposed the block.</p></div><span class="chain-state" id="chain-state">Ready</span></div>
+            <div class="chain-scroll" id="chain-scroll" tabindex="0" aria-label="Recent proposed blocks and their branches">
+              <div id="chain-track" class="chain-track"></div>
             </div>
-            <div class="info-group">
-              <h4>Post-Settlement Measurements</h4>
-              <ul class="meta-list" id="inspector-metrics-list">
-                <li><span>Fork Rate:</span> <strong id="m-fork-rate" class="text-accent">-</strong></li>
-                <li><span>Stale Rate:</span> <strong id="m-stale-rate">-</strong></li>
-                <li><span>Fork Episodes:</span> <strong id="m-fork-episodes">-</strong></li>
-                <li><span>Mean Propagation Delay:</span> <strong id="m-prop-delay">-</strong></li>
-                <li><span>Offered (Raw) TPS:</span> <strong id="m-offered-tps">-</strong></li>
-                <li><span>Processed Throughput:</span> <strong id="m-processed-tps">-</strong></li>
-                <li><span>Finalized Goodput:</span> <strong id="m-goodput">-</strong></li>
-                <li><span>Node Consistency:</span> <strong id="m-consistency">-</strong></li>
-              </ul>
-            </div>
-          </div>
+            <div class="legend"><span><i class="dot online"></i>First branch</span><span><i class="dot fork-dot"></i>Competing branch</span></div>
+          </article>
+          <article class="panel forecast-panel">
+            <div class="panel-heading"><div><h2>Fork forecast</h2><p>Compare trained models at the same block height.</p></div></div>
+            <div id="chain-forecast"><p class="status">Play a recorded run to see forecasts.</p></div>
+          </article>
         </div>
+        <article class="panel transport">
+          <div class="transport-actions">
+            <button type="button" id="replay-reset" title="Restart replay">Restart</button>
+            <button type="button" id="replay-prev" aria-label="Previous event">&larr;</button>
+            <button type="button" class="primary" id="replay-play">Play</button>
+            <button type="button" id="replay-next" aria-label="Next event">&rarr;</button>
+            <label>Playback <select id="replay-mode"><option value="blocks">Blocks</option><option value="events">All events</option></select></label>
+            <label>Speed <select id="replay-speed"><option value="1">1&times;</option><option value="2">2&times;</option><option value="4">4&times;</option></select></label>
+            <button type="button" id="replay-copy">Copy position link</button>
+            <form id="replay-seek-form">
+              <label for="replay-seek">Event</label><input id="replay-seek" type="number" min="0" step="1" value="0" required>
+              <button type="submit" id="replay-go">Go</button>
+            </form>
+          </div>
+          <input type="range" id="replay-progress" min="0" max="0" value="0" aria-label="Replay event position">
+          <div class="transport-caption"><span id="replay-position">Event 0</span><span id="replay-clock">0.000 s</span></div>
+          <p class="status" id="replay-status" role="status"></p>
+          <p class="status" id="replay-copy-status" role="status"></p>
+          <input id="replay-share-url" type="url" aria-label="Replay position link" readonly hidden>
+        </article>
+        <article class="panel">
+          <div class="panel-heading">
+            <div><h2>Recorded forks</h2><p>Jump to a competing branch in this run.</p></div>
+            <div class="fork-actions">
+              <button type="button" id="fork-prev">Previous fork</button>
+              <button type="button" id="fork-next">Next fork</button>
+            </div>
+          </div>
+          <p class="status" id="fork-index-status" role="status"></p>
+          <div id="fork-markers" class="fork-markers"></div>
+        </article>
+        <div class="replay-layout">
+          <article class="panel">
+            <div class="panel-heading"><div><h2>Network activity</h2><p>Use All events to follow individual block transmissions.</p></div></div>
+            <div id="network-map" class="network-map"></div>
+            <div class="legend"><span><i class="dot online"></i>Observed</span><span><i class="dot offline"></i>Offline</span><span><i class="dot"></i>Unrecorded</span></div>
+          </article>
+          <article class="panel replay-detail">
+            <div class="panel-heading"><h2>Current event</h2></div>
+            <div id="replay-event"><p class="status">Select a recorded run.</p></div>
+            <button type="button" id="trace-block" class="text-button" disabled>Trace this block &rarr;</button>
+            <button type="button" class="text-button" data-open="logs">Browse event logs &rarr;</button>
+          </article>
+        </div>
+        <article class="panel">
+          <div class="panel-heading"><div><h2>Node state</h2><p>Last recorded chain tip and availability at the selected event.</p></div></div>
+          <div id="node-cards" class="node-cards"></div>
+        </article>
       </section>
 
-      <!-- TAB 3: NODE STATUS -->
-      <section id="tab-nodes" class="tab-panel">
-        <div class="panel-card">
-          <div class="panel-header">
-            <div>
-              <h3>Recorded Node State (Post-Run Snapshot)</h3>
-              <p class="subtitle">Final local chain tip heights, tip hashes, and validator peer state recorded in event log (or unrecorded if offline/no events)</p>
-            </div>
-            <span class="badge badge-info" id="node-grid-run-label">Selected Run</span>
-          </div>
-          <div class="node-grid" id="node-cards-container">
-            <!-- Node cards dynamically inserted here -->
-          </div>
-        </div>
+      <section id="view-logs" hidden aria-labelledby="logs-heading">
+        <div class="page-heading"><h1 id="logs-heading">Event logs</h1><p>Search recorded events and inspect their original JSON fields.</p></div>
+        <article class="panel">
+          <form id="log-filters" class="filters">
+            <label>Search JSON<input id="log-query" type="search" placeholder="Hash, reason, or field" maxlength="200"></label>
+            <label>Event type <select id="log-type">
+              <option value="">All event types</option><option>BlockPropose</option><option>BlockGossip</option>
+              <option>BlockArrive</option><option>TipUpdate</option><option>BlockOrphan</option>
+              <option>BlockReject</option><option>ChurnToggle</option><option>ConfigChange</option>
+            </select></label>
+            <label>Participant<input id="log-node" type="search" placeholder="e.g. N4" maxlength="50"></label>
+            <button type="submit" class="primary">Apply filters</button>
+            <button type="reset">Clear</button>
+          </form>
+          <div class="table-scroll"><table>
+            <thead><tr><th>Event</th><th>Sim. time</th><th>Type</th><th>Node</th><th>Details</th><th>Actions</th></tr></thead>
+            <tbody id="log-rows"></tbody>
+          </table></div>
+          <div class="pagination"><p class="status" id="log-status" role="status"></p><button type="button" id="log-prev">Previous</button><button type="button" id="log-next">Next</button></div>
+        </article>
+        <dialog id="log-dialog"><div class="dialog-heading"><h2 id="log-dialog-title">Event JSON</h2><form method="dialog"><button>Close</button></form></div><pre id="log-json"></pre></dialog>
       </section>
 
-      <!-- TAB 4: FORK TIMELINE -->
-      <section id="tab-timeline" class="tab-panel">
-        <div class="panel-card">
-          <div class="panel-header">
-            <div>
-              <h3>Consensus Event Stream & Fork Emergence Timeline</h3>
-              <p class="subtitle">Chronological sequence of block proposals, competing sibling branches, and reorgs (max 500 events per query)</p>
-            </div>
-            <span class="badge badge-warning" id="timeline-run-label">Selected Run</span>
-          </div>
-          <div class="timeline-controls" style="display: flex; gap: 10px; align-items: center; margin-bottom: 16px; flex-wrap: wrap;">
-            <button class="btn btn-sm btn-outline" id="timeline-jump-start">Earliest (Prop #0)</button>
-            <button class="btn btn-sm btn-accent" id="timeline-jump-transition">Jump to Transition (Prop #5,000)</button>
-            <div style="display: flex; align-items: center; gap: 6px;">
-              <label for="timeline-from-prop" style="font-size: 0.85rem; color: var(--text-muted);">From Proposal #:</label>
-              <input type="number" id="timeline-from-prop" value="0" min="0" max="10000" style="width: 85px; padding: 4px 8px; border-radius: 4px; background: rgba(0,0,0,0.3); border: 1px solid var(--border-color); color: #fff;">
-              <button class="btn btn-sm btn-outline" id="timeline-apply-filter">Filter</button>
-            </div>
-            <div style="margin-left: auto; display: flex; gap: 6px;">
-              <button class="btn btn-sm btn-outline" id="timeline-prev-page">← Previous</button>
-              <button class="btn btn-sm btn-outline" id="timeline-next-page">Next →</button>
-            </div>
-          </div>
-          <div class="timeline-container" id="timeline-list">
-            <!-- Timeline items dynamically inserted here -->
-          </div>
-        </div>
+      <section id="view-timeline" hidden aria-labelledby="timeline-heading">
+        <div class="page-heading"><h1 id="timeline-heading">Fork timeline</h1><p>Review competing branches, reorganizations, and other consensus events.</p></div>
+        <article class="panel">
+          <form class="filters" id="timeline-filter">
+            <label>From proposal<input id="timeline-proposal" type="number" value="0" min="0" step="1" required></label>
+            <button type="submit" class="primary">Apply</button>
+          </form>
+          <div class="table-scroll"><table><thead><tr><th>Sim. time</th><th>Proposal</th><th>Event</th><th>Node</th><th>Details</th></tr></thead><tbody id="timeline-rows"></tbody></table></div>
+          <div class="pagination"><p class="status" id="timeline-status" role="status"></p><button type="button" id="timeline-prev">Previous</button><button type="button" id="timeline-next">Next</button></div>
+        </article>
       </section>
 
-      <!-- TAB 5: SCENARIO MATRIX CHARTS -->
-      <section id="tab-scenarios" class="tab-panel">
-        <div class="grid-2col">
-          <div class="panel-card">
-            <div class="panel-header">
-              <h3>Fork Rate vs. Stale Block Rate (%)</h3>
-            </div>
-            <div class="chart-wrapper">
-              <canvas id="chart-fork-stale"></canvas>
-            </div>
-          </div>
-          <div class="panel-card">
-            <div class="panel-header">
-              <h3>Mean & P95 Propagation Latency (s)</h3>
-            </div>
-            <div class="chart-wrapper">
-              <canvas id="chart-prop-delay"></canvas>
-            </div>
-          </div>
+      <section id="view-run" hidden aria-labelledby="run-heading">
+        <div class="page-heading"><h1 id="run-heading">Run details</h1><p id="run-status" role="status">Select a simulation run.</p></div>
+        <div class="two-columns">
+          <article class="panel"><div class="panel-heading"><h2>Configuration</h2></div><dl id="run-config" class="data-list"></dl></article>
+          <article class="panel"><div class="panel-heading"><h2>Post-settlement metrics</h2></div><dl id="run-metrics" class="data-list"></dl></article>
         </div>
-        <div class="panel-card mt-6">
-          <div class="panel-header">
-            <h3>Finalized Goodput (TPS) & Node-View Consistency (0.0 – 1.0)</h3>
-          </div>
-          <div class="chart-wrapper">
-            <canvas id="chart-goodput-consistency"></canvas>
-          </div>
-        </div>
+        <article class="panel"><div class="panel-heading"><h2>Final node snapshot</h2></div><p class="status" id="snapshot-status" role="status"></p><div class="node-cards" id="snapshot-cards"></div></article>
       </section>
 
-      <!-- TAB 6: MODELS & SENSITIVITY -->
-      <section id="tab-models" class="tab-panel">
-        <div class="grid-2col">
-          <div class="panel-card">
-            <div class="panel-header">
-              <div>
-                <h3>Model Performance Benchmark</h3>
-                <p class="subtitle" id="evaluation-scope-desc">Production Matrix (Seeds 4–30, N=57,062)</p>
-              </div>
-              <div style="display:flex; align-items:center; gap:8px;">
-                <label for="scope-select" style="font-size:0.8rem; color:var(--text-muted);">Scope:</label>
-                <select id="scope-select" class="dropdown" style="padding:4px 8px; font-size:0.8rem;">
-                  <option value="production" selected>Production (Seeds 4–30, N=57,062)</option>
-                  <option value="pilot">Pilot Dataset (Seed 3, N=1,608)</option>
-                </select>
-              </div>
-            </div>
-            <div class="table-responsive">
-              <table class="data-table" id="models-table">
-                <thead>
-                  <tr>
-                    <th>Model</th>
-                    <th>ROC-AUC</th>
-                    <th>PR-AUC</th>
-                    <th>F1 Score</th>
-                    <th>Precision</th>
-                    <th>Recall</th>
-                    <th>Brier</th>
-                  </tr>
-                </thead>
-                <tbody id="models-tbody">
-                  <!-- Models populated dynamically -->
-                </tbody>
-              </table>
-            </div>
-            <div class="confusion-grid mt-4" id="confusion-container">
-              <!-- Confusion matrices inserted dynamically -->
-            </div>
-          </div>
-
-          <div class="panel-card">
-            <div class="panel-header">
-              <h3>Horizon Sensitivity Sweep (H = 1..5)</h3>
-              <span class="badge badge-accent">Predictability vs. Lead-Time</span>
-            </div>
-            <div class="chart-wrapper">
-              <canvas id="chart-sensitivity"></canvas>
-            </div>
-            <div class="p-3 text-muted text-sm mt-2">
-              <strong>Empirical Law:</strong> As forecast horizon increases from H=1 to H=5, positive fork label prevalence rises from 30.5% to 63.8%, allowing Logistic Regression ROC-AUC to climb from 0.7547 to 0.8621.
-            </div>
-          </div>
+      <section id="view-models" hidden aria-labelledby="models-heading">
+        <div class="page-heading"><h1 id="models-heading">Model evaluation</h1><p>Compare fork forecasts across evaluation scopes and prediction horizons.</p></div>
+        <article class="panel">
+          <div class="panel-heading"><div><h2>Model benchmark</h2><p id="model-status" role="status"></p></div><label>Scope <select id="model-scope"></select></label></div>
+          <div class="table-scroll"><table><thead><tr><th>Model</th><th>ROC-AUC</th><th>PR-AUC</th><th>F1</th><th>Precision</th><th>Recall</th><th>Brier</th></tr></thead><tbody id="model-rows"></tbody></table></div>
+          <dl class="data-list" id="model-confusion"></dl>
+        </article>
+        <div class="two-columns">
+          <article class="panel">
+            <div class="panel-heading"><h2>Forecast horizon</h2></div>
+            <div class="table-scroll"><table><thead><tr><th>Blocks</th><th>Prevalence</th><th>LR ROC-AUC</th><th>RF ROC-AUC</th></tr></thead><tbody id="sensitivity-rows"></tbody></table></div>
+            <p class="status" id="sensitivity-status" role="status"></p>
+          </article>
+          <article class="panel"><div class="panel-heading"><h2>Drift detection</h2></div><dl class="data-list" id="drift-details"></dl></article>
         </div>
       </section>
     </main>
   </div>
-
-  <script src="charts.js"></script>
-  <script src="app.js"></script>
 </body>
 </html>
